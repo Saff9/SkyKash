@@ -1,10 +1,14 @@
-// components/Dashboard.tsx
+// components/Dashboard.tsx - Fix the imports section
 'use client';
 
 import { useState, useEffect } from 'react';
 import Menu from './Menu';
 import WeatherCard from './WeatherCard';
 import InstallPrompt from './InstallPrompt';
+import { useLocation } from '../hooks/useLocation';
+import { useDynamicTheme } from '../hooks/useDynamicTheme';
+
+// Import the 7 new features
 import TourismSpotlight from './TourismSpotlight';
 import AirQuality from './AirQuality';
 import PrayerTimes from './PrayerTimes';
@@ -12,9 +16,8 @@ import WeatherTrends from './WeatherTrends';
 import ActivityRecommendations from './ActivityRecommendations';
 import WorldWeather from './WorldWeather';
 import ThemeIndicator from './ThemeIndicator';
-import { useLocation } from '../hooks/useLocation';
-import { useDynamicTheme } from '../hooks/useDynamicTheme';
 
+// ... rest of the Dashboard component remains the same
 interface WeatherData {
   name: string;
   main: {
