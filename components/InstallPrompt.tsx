@@ -3,85 +3,70 @@
 
 import { useState, useEffect } from 'react';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 declare global {
-  interface Window {
-    deferredPrompt: any;
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent;
   }
 }
 
 export default function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstalled(true);
-      return;
-    }
-
-    // Show prompt after 6 seconds
-    const timer = setTimeout(() => {
-      setShowPrompt(true);
-    }, 6000);
-
-    // Listen for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
-      window.deferredPrompt = e;
+      setDeferredPrompt(e);
+      
+      // Show prompt after 6 seconds
+      setTimeout(() => {
+        setShowPrompt(true);
+      }, 6000);
     };
 
-    // Listen for app installed event
     const handleAppInstalled = () => {
-      setIsInstalled(true);
       setShowPrompt(false);
+      setDeferredPrompt(null);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
 
-    // Listen for custom show install prompt event from menu
-    const handleShowInstallPrompt = () => {
-      setShowPrompt(true);
-    };
-
-    window.addEventListener('showInstallPrompt', handleShowInstallPrompt);
-
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
-      window.removeEventListener('showInstallPrompt', handleShowInstallPrompt);
     };
   }, []);
 
   const handleInstall = async () => {
-    if (window.deferredPrompt) {
-      window.deferredPrompt.prompt();
-      const { outcome } = await window.deferredPrompt.userChoice;
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
       
       if (outcome === 'accepted') {
-        setIsInstalled(true);
         setShowPrompt(false);
+        setDeferredPrompt(null);
       }
-      
-      window.deferredPrompt = null;
     }
   };
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    // Don't show again in this session
     sessionStorage.setItem('installPromptDismissed', 'true');
   };
 
-  if (isInstalled || !showPrompt || sessionStorage.getItem('installPromptDismissed')) {
+  if (!showPrompt || sessionStorage.getItem('installPromptDismissed')) {
     return null;
   }
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-40">
-      <div className="card p-6 shadow-2xl">
+      <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-kashmir-blue rounded-xl flex items-center justify-center">
@@ -96,7 +81,7 @@ export default function InstallPrompt() {
           <div className="flex space-x-2">
             <button
               onClick={handleInstall}
-              className="btn-primary text-sm px-4 py-2"
+              className="bg-kashmir-blue hover:bg-kashmir-dark text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 shadow-lg text-sm"
             >
               Install
             </button>
