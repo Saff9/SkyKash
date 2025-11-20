@@ -139,3 +139,89 @@
 .theme-moderate .card {
   border: 1px solid rgba(100, 255, 100, 0.3);
 }
+
+/* Add to app/globals.css */
+
+/* Interactive card hover effects */
+.card {
+  @apply bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/40 transition-all duration-300;
+}
+
+.card:hover {
+  @apply transform -translate-y-1 shadow-2xl border-kashmir-light-blue-200 dark:border-kashmir-dark-blue-400;
+}
+
+/* Feature grid animations */
+.feature-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.feature-item {
+  @apply card p-6 cursor-pointer transition-all duration-300;
+}
+
+.feature-item:hover {
+  @apply transform scale-105;
+}
+
+/* Active feature indicator */
+.active-feature {
+  @apply border-2 border-kashmir-light-green-500 dark:border-kashmir-dark-green-500;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-kashmir-light-blue-500 dark:bg-kashmir-dark-blue-500 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-kashmir-light-blue-600 dark:bg-kashmir-dark-blue-600;
+}
+
+/* Loading animations */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Feature badges */
+.feature-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300;
+}
+
+/* Weather condition animations */
+.weather-sunny {
+  animation: sunny-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes sunny-glow {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.1); }
+}
+
+.weather-rainy {
+  animation: rain-drop 2s ease-in-out infinite;
+}
+
+@keyframes rain-drop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
