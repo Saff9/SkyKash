@@ -80,3 +80,62 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Add to globals.css */
+
+/* Sunny Theme */
+.theme-sunny {
+  --gradient-start: #FFD700;
+  --gradient-mid: #FFA500;
+  --gradient-end: #FF8C00;
+}
+
+.theme-sunny body {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+}
+
+/* Rainy Theme */
+.theme-rainy {
+  --gradient-start: #4A6572;
+  --gradient-mid: #344955;
+  --gradient-end: #232F34;
+}
+
+.theme-rainy body {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+}
+
+/* Snowy Theme */
+.theme-snowy {
+  --gradient-start: #E3F2FD;
+  --gradient-mid: #BBDEFB;
+  --gradient-end: #90CAF9;
+}
+
+.theme-snowy body {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+}
+
+/* Cloudy Theme */
+.theme-cloudy {
+  --gradient-start: #CFD8DC;
+  --gradient-mid: #B0BEC5;
+  --gradient-end: #90A4AE;
+}
+
+.theme-cloudy body {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+}
+
+/* Temperature-based themes */
+.theme-hot .card {
+  border: 1px solid rgba(255, 100, 100, 0.3);
+}
+
+.theme-cold .card {
+  border: 1px solid rgba(100, 150, 255, 0.3);
+}
+
+.theme-moderate .card {
+  border: 1px solid rgba(100, 255, 100, 0.3);
+}
