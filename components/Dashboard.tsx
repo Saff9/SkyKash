@@ -22,28 +22,7 @@ import ThemeIndicator from './ThemeIndicator';
 // ... rest of the component
 
 // ... rest of the Dashboard component remains the same
-interface WeatherData {
-  name: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-    pressure: number;
-  };
-  weather: Array<{
-    main: string;
-    description: string;
-    icon: string;
-  }>;
-  wind: {
-    speed: number;
-  };
-  uv?: {
-    value: number;
-    risk: string;
-    protection: string;
-  };
-}
+
 
 export default function Dashboard() {
   const [userName, setUserName] = useState('');
