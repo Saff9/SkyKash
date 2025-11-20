@@ -1,14 +1,14 @@
 // app/api/subscribe/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mock database - in production, connect to PlanetScale
+export const dynamic = 'force-dynamic';
+
 let subscribers: Set<string> = new Set();
 
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json();
 
-    // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json(
         { message: 'Please provide a valid email address' },
@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if email already exists
     if (subscribers.has(email)) {
       return NextResponse.json(
         { message: 'This email is already subscribed' },
@@ -24,7 +23,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Add to subscribers (in production, save to PlanetScale)
     subscribers.add(email);
     console.log('New subscriber:', email);
 
