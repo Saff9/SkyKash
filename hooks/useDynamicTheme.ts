@@ -8,20 +8,24 @@ export function useDynamicTheme(weatherCondition: string, temperature: number) {
     const root = document.documentElement;
     
     // Remove previous theme classes
-    root.classList.remove(
+    const themeClasses = [
       'theme-sunny', 'theme-rainy', 'theme-snowy', 'theme-cloudy',
-      'theme-hot', 'theme-cold', 'theme-moderate'
-    );
+      'theme-hot', 'theme-cold', 'theme-moderate', 'theme-stormy'
+    ];
+    themeClasses.forEach(className => root.classList.remove(className));
 
     // Apply theme based on weather condition
-    if (weatherCondition.toLowerCase().includes('sunny') || weatherCondition.toLowerCase().includes('clear')) {
+    const condition = weatherCondition.toLowerCase();
+    if (condition.includes('sunny') || condition.includes('clear')) {
       root.classList.add('theme-sunny');
-    } else if (weatherCondition.toLowerCase().includes('rain')) {
+    } else if (condition.includes('rain') || condition.includes('drizzle')) {
       root.classList.add('theme-rainy');
-    } else if (weatherCondition.toLowerCase().includes('snow')) {
+    } else if (condition.includes('snow') || condition.includes('sleet')) {
       root.classList.add('theme-snowy');
-    } else if (weatherCondition.toLowerCase().includes('cloud')) {
+    } else if (condition.includes('cloud')) {
       root.classList.add('theme-cloudy');
+    } else if (condition.includes('storm') || condition.includes('thunder')) {
+      root.classList.add('theme-stormy');
     }
 
     // Apply theme based on temperature
@@ -33,56 +37,4 @@ export function useDynamicTheme(weatherCondition: string, temperature: number) {
       root.classList.add('theme-moderate');
     }
   }, [weatherCondition, temperature]);
-}
-
-// components/ThemeIndicator.tsx
-'use client';
-
-interface ThemeIndicatorProps {
-  weatherCondition: string;
-  temperature: number;
-}
-
-export default function ThemeIndicator({ weatherCondition, temperature }: ThemeIndicatorProps) {
-  const getThemeInfo = () => {
-    if (weatherCondition.toLowerCase().includes('sunny')) {
-      return { emoji: '☀️', message: 'Bright & Sunny Theme Active' };
-    } else if (weatherCondition.toLowerCase().includes('rain')) {
-      return { emoji: '🌧️', message: 'Cool & Rainy Theme Active' };
-    } else if (weatherCondition.toLowerCase().includes('snow')) {
-      return { emoji: '❄️', message: 'Winter Wonderland Theme Active' };
-    } else if (weatherCondition.toLowerCase().includes('cloud')) {
-      return { emoji: '☁️', message: 'Soft & Cloudy Theme Active' };
-    } else {
-      return { emoji: '🌈', message: 'Dynamic Theme Active' };
-    }
-  };
-
-  const themeInfo = getThemeInfo();
-
-  return (
-    <div className="card p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <span className="text-2xl">{themeInfo.emoji}</span>
-          <div>
-            <p className="text-sm font-semibold text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
-              Dynamic Theme
-            </p>
-            <p className="text-xs text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">
-              {themeInfo.message}
-            </p>
-          </div>
-        </div>
-        <div className="text-right">
-          <p className="text-sm font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
-            Auto
-          </p>
-          <p className="text-xs text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">
-            AI Powered
-          </p>
-        </div>
-      </div>
-    </div>
-  );
 }
