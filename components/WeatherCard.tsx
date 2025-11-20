@@ -1,27 +1,11 @@
 // components/WeatherCard.tsx
 'use client';
 
-interface WeatherData {
-  name: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-    pressure: number;
-  };
-  weather: Array<{
-    main: string;
-    description: string;
-    icon: string;
-  }>;
-  wind: {
-    speed: number;
-  };
-}
+import type { WeatherData } from '../types/weather';
 
 interface WeatherCardProps {
   weatherData: WeatherData;
-  timeOfDay?: string; // Add this line to make it optional
+  timeOfDay?: string;
 }
 
 export default function WeatherCard({ weatherData, timeOfDay }: WeatherCardProps) {
@@ -46,7 +30,9 @@ export default function WeatherCard({ weatherData, timeOfDay }: WeatherCardProps
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-3xl font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">{weatherData.name}</h2>
-          <p className="text-kashmir-green mt-1">{getWeatherMessage(weatherData.main.temp)}</p>
+          <p className="text-kashmir-light-green-600 dark:text-kashmir-dark-green-400 mt-1">
+            {getWeatherMessage(weatherData.main.temp)}
+          </p>
           {timeOfDay && (
             <p className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500 mt-1">
               Perfect {timeOfDay} weather
@@ -55,7 +41,7 @@ export default function WeatherCard({ weatherData, timeOfDay }: WeatherCardProps
         </div>
         <div className="text-right">
           <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Current Weather</p>
-          <p className="text-lg text-kashmir-green capitalize font-medium">
+          <p className="text-lg text-kashmir-light-green-600 dark:text-kashmir-dark-green-400 capitalize font-medium">
             {weatherData.weather[0].description}
           </p>
         </div>
@@ -83,15 +69,21 @@ export default function WeatherCard({ weatherData, timeOfDay }: WeatherCardProps
         </div>
         <div className="bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200 rounded-lg p-3">
           <p className="text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Humidity</p>
-          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">{weatherData.main.humidity}%</p>
+          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">
+            {weatherData.main.humidity}%
+          </p>
         </div>
         <div className="bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200 rounded-lg p-3">
           <p className="text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Pressure</p>
-          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">{weatherData.main.pressure} hPa</p>
+          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">
+            {weatherData.main.pressure} hPa
+          </p>
         </div>
         <div className="bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200 rounded-lg p-3">
           <p className="text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Wind</p>
-          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">{weatherData.wind.speed} m/s</p>
+          <p className="font-semibold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 text-lg">
+            {weatherData.wind.speed} m/s
+          </p>
         </div>
       </div>
     </div>
