@@ -1,6 +1,8 @@
 // app/api/weather/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic'; // Add this line
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -15,13 +17,15 @@ export async function GET(request: NextRequest) {
     }
 
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`,
+      {
+        next: { revalidate: 300 } // Cache for 5 minutes
+      }
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
       return NextResponse.json(
-        { message: errorData.message || 'Failed to fetch weather data' },
+        { message: 'Failed to fetch weather data' },
         { status: response.status }
       );
     }
