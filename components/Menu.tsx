@@ -101,22 +101,26 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
               </p>
             </div>
 
-            <div className="menu-item">
-              <span className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">Contact Us</span>
-              <div className="space-y-1">
-                <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">saffanakbar942@gmail.com</p>
-                <div className="flex space-x-3 mt-2">
-                  <a href="https://instagram.com/saffan.akbar" target="_blank" rel="noopener noreferrer" 
-                     className="text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 hover:underline">
-                    📷 Instagram
-                  </a>
-                  <a href="https://github.com/Saff9" target="_blank" rel="noopener noreferrer"
-                     className="text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 hover:underline">
-                    💻 GitHub
-                  </a>
-                </div>
-              </div>
-            </div>
+          // In Menu.tsx, update the contact section:
+<div className="menu-item">
+  <span className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">Contact Us</span>
+  <div className="space-y-2">
+    <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">saffanakbar942@gmail.com</p>
+    <div className="flex space-x-3 mt-2">
+      <a href="https://www.instagram.com/owaisdar_511?igsh=MWV6d21lbjVpNXh6Yg==" target="_blank" rel="noopener noreferrer" 
+         className="flex items-center space-x-1 text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 hover:underline text-sm">
+        <img src="/instagram-icon.png" alt="Instagram" className="w-4 h-4" />
+        <span>Instagram</span>
+      </a>
+      <a href="http://www.youtube.com/@CaliZenOwais" target="_blank" rel="noopener noreferrer"
+         className="flex items-center space-x-1 text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 hover:underline text-sm">
+        <img src="/youtube-icon.png" alt="YouTube" className="w-4 h-4" />
+        <span>YouTube</span>
+      </a>
+    </div>
+  </div>
+</div>
+            
 
             {/* Settings */}
             <div className="menu-item">
