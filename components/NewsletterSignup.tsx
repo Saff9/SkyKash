@@ -180,7 +180,7 @@ export default function NewsletterSignup() {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">
-            Already a premium user? You'll be redirected automatically
+            If UR Already a premium user? You'll be redirected automatically
           </p>
         </div>
 
@@ -206,7 +206,7 @@ export default function NewsletterSignup() {
             </div>
             <div className="flex items-center space-x-2 text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
               <span className="text-kashmir-light-green-500 dark:text-kashmir-dark-green-500">✓</span>
-              <span>7+ Features</span>
+              <span>+ Features</span>
             </div>
             <div className="flex items-center space-x-2 text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
               <span className="text-kashmir-light-green-500 dark:text-kashmir-dark-green-500">✓</span>
