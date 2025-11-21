@@ -297,7 +297,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 **Developer**
 
-**Saffan Akbar**
+**Owais Ahmad Dar**
 - 📧 Email: saffanakbar942@gmail.com
 - 📷 Instagram: [@owaisdar_511](https://www.instagram.com/owaisdar_511)
 - 🎥 YouTube: [CaliZenOwais](http://www.youtube.com/@CaliZenOwais)
