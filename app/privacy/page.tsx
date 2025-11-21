@@ -5,7 +5,7 @@ export default function PrivacyPolicy() {
       <div className="max-w-4xl mx-auto card p-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400 mb-4">
-            Privacy Policy
+            Privacy Policy 🙄😄
           </h1>
           <p className="text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">
             Last updated: {new Date().toLocaleDateString()}
@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
         <div className="space-y-6 text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
           <section>
             <h2 className="text-2xl font-semibold text-kashmir-light-neutral-800 dark:text-kashmir-dark-neutral-200 mb-4">
-              1. Information We Collect
+              1. Information We Collect😄
             </h2>
             <div className="space-y-3">
               <p>
@@ -40,6 +40,7 @@ export default function PrivacyPolicy() {
               <li>Improve our app's features and performance</li>
               <li>Detect and prevent technical issues</li>
               <li>Personalize your experience with location-based services</li>
+              <li>I did not collect any inf. or data 😄😄😄</li>
             </ul>
           </section>
 
@@ -91,14 +92,14 @@ export default function PrivacyPolicy() {
             </p>
             <div className="mt-2">
               <p>📧 Email: saffanakbar942@gmail.com</p>
-              <p>📷 Instagram: @saffan.akbar</p>
+              <p>ه 🅾 𝐈𝐧𝐬𝐭𝐚𝐠𝐫𝐚𝐦 ★: @0waisdar_511</p>
               <p>💻 GitHub: Saff9</p>
             </div>
           </section>
 
           <div className="border-t border-kashmir-light-neutral-200 dark:border-kashmir-dark-neutral-300 pt-6">
             <p className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">
-              By using SkyKash, you agree to the terms outlined in this Privacy Policy.
+              By using SkyKash, you agree to the terms outlined in this Privacy Policy.🙄
             </p>
           </div>
         </div>
