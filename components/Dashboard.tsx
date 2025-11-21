@@ -1,4 +1,4 @@
-// components/Dashboard.tsx - Update imports
+// components/Dashboard.tsx - Key updates for mobile and time format
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,7 +7,6 @@ import WeatherCard from './WeatherCard';
 import InstallPrompt from './InstallPrompt';
 import { useLocation } from '../hooks/useLocation';
 import { useDynamicTheme } from '../hooks/useDynamicTheme';
-import type { WeatherData } from '../types/weather'; // Add this import
 
 // Import the 7 new features
 import TourismSpotlight from './TourismSpotlight';
@@ -18,11 +17,28 @@ import ActivityRecommendations from './ActivityRecommendations';
 import WorldWeather from './WorldWeather';
 import ThemeIndicator from './ThemeIndicator';
 
-// Remove the local WeatherData interface since we're importing it
-// ... rest of the component
-
-// ... rest of the Dashboard component remains the same
-
+interface WeatherData {
+  name: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+    pressure: number;
+  };
+  weather: Array<{
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  wind: {
+    speed: number;
+  };
+  uv?: {
+    value: number;
+    risk: string;
+    protection: string;
+  };
+}
 
 export default function Dashboard() {
   const [userName, setUserName] = useState('');
@@ -33,6 +49,7 @@ export default function Dashboard() {
   const [searchCity, setSearchCity] = useState('');
   const [usingCurrentLocation, setUsingCurrentLocation] = useState(false);
   const [activeFeature, setActiveFeature] = useState('weather');
+  const [currentTime, setCurrentTime] = useState('');
   
   const { location, loading: locationLoading, error: locationError } = useLocation();
 
@@ -44,12 +61,27 @@ export default function Dashboard() {
       setUserName(name);
     }
 
+    // Update time every minute
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      }));
+    };
+
+    updateTime();
+    const timeInterval = setInterval(updateTime, 60000);
+
     if (autoLocation && location && !weatherData) {
       fetchWeatherByCoords(location.latitude, location.longitude);
       setUsingCurrentLocation(true);
     } else if (!weatherData) {
       fetchWeatherData('Srinagar');
     }
+
+    return () => clearInterval(timeInterval);
   }, [location]);
 
   // Apply dynamic theme
@@ -135,67 +167,50 @@ export default function Dashboard() {
     return 'night';
   };
 
-  const getActiveFeatureBadge = () => {
-    const badges = {
-      weather: { emoji: '🌤️', text: 'Weather Data' },
-      location: { emoji: '📍', text: 'Auto Location' },
-      search: { emoji: '🔍', text: 'City Search' },
-      tourism: { emoji: '🏔️', text: 'Tourism' },
-      aqi: { emoji: '💨', text: 'Air Quality' },
-      prayer: { emoji: '🕌', text: 'Prayer Times' }
-    };
-    
-    return badges[activeFeature as keyof typeof badges] || badges.weather;
-  };
-
-  const featureBadge = getActiveFeatureBadge();
-
   return (
-    <div className="min-h-screen bg-kashmir-light-neutral-50 dark:bg-kashmir-dark-neutral-50 transition-colors duration-300">
-      {/* Header */}
+    <div className="min-h-screen bg-kashmir-light-neutral-50 dark:bg-kashmir-dark-neutral-50 transition-colors duration-300 mobile-container">
+      {/* Header - Improved for Mobile */}
       <header className="bg-white/90 dark:bg-kashmir-dark-neutral-100/90 backdrop-blur-sm border-b border-kashmir-light-neutral-200 dark:border-kashmir-dark-neutral-300 transition-colors duration-300 sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center space-x-4">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center space-x-3">
               <button
                 onClick={() => setMenuOpen(true)}
                 className="p-2 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200 transition-colors text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">❄️ SkyKash</h1>
-                <div className="flex items-center space-x-2 mt-1">
-                  <span className="text-xs bg-kashmir-light-green-100 dark:bg-kashmir-dark-green-900 text-kashmir-light-green-700 dark:text-kashmir-dark-green-300 px-2 py-1 rounded-full">
-                    {featureBadge.emoji} {featureBadge.text}
-                  </span>
-                </div>
+                <h1 className="text-xl font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">❄️ SkyKash</h1>
+                <p className="text-xs text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">
+                  {currentTime}
+                </p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-kashmir-light-green-600 dark:text-kashmir-dark-green-400 font-semibold">
+              <p className="text-kashmir-light-green-600 dark:text-kashmir-dark-green-400 font-semibold text-sm">
                 {getGreeting()}, {userName}!
               </p>
-              <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">
+              <p className="text-xs text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">
                 {usingCurrentLocation && location ? `📍 ${location.city}` : 'Kashmir Weather'}
               </p>
             </div>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar - Improved for Mobile */}
           <form onSubmit={handleSearch} className="flex space-x-2">
             <input
               type="text"
               value={searchCity}
               onChange={(e) => setSearchCity(e.target.value)}
-              placeholder="Search for a city..."
-              className="flex-1 px-4 py-2 border border-kashmir-light-neutral-300 dark:border-kashmir-dark-neutral-400 rounded-lg focus:ring-2 focus:ring-kashmir-light-blue-500 dark:focus:ring-kashmir-dark-blue-500 focus:border-transparent bg-white/50 dark:bg-kashmir-dark-neutral-100/50 text-kashmir-light-neutral-900 dark:text-kashmir-dark-neutral-100 transition-colors duration-300"
+              placeholder="Search city..."
+              className="flex-1 px-3 py-2 border border-kashmir-light-neutral-300 dark:border-kashmir-dark-neutral-400 rounded-lg focus:ring-2 focus:ring-kashmir-light-blue-500 dark:focus:ring-kashmir-dark-blue-500 focus:border-transparent bg-white/50 dark:bg-kashmir-dark-neutral-100/50 text-kashmir-light-neutral-900 dark:text-kashmir-dark-neutral-100 transition-colors duration-300 text-sm"
             />
             <button
               type="submit"
-              className="px-4 py-2 bg-kashmir-light-blue-500 hover:bg-kashmir-light-blue-600 dark:bg-kashmir-dark-blue-500 dark:hover:bg-kashmir-dark-blue-600 text-white rounded-lg transition-colors duration-300"
+              className="px-3 py-2 bg-kashmir-light-blue-500 hover:bg-kashmir-light-blue-600 dark:bg-kashmir-dark-blue-500 dark:hover:bg-kashmir-dark-blue-600 text-white rounded-lg transition-colors duration-300 text-sm min-w-[60px]"
             >
               Search
             </button>
@@ -203,7 +218,7 @@ export default function Dashboard() {
               type="button"
               onClick={handleUseCurrentLocation}
               disabled={locationLoading || !location}
-              className="px-4 py-2 bg-kashmir-light-green-500 hover:bg-kashmir-light-green-600 dark:bg-kashmir-dark-green-500 dark:hover:bg-kashmir-dark-green-600 text-white rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-2 bg-kashmir-light-green-500 hover:bg-kashmir-light-green-600 dark:bg-kashmir-dark-green-500 dark:hover:bg-kashmir-dark-green-600 text-white rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm min-w-[70px]"
             >
               📍 Current
             </button>
@@ -211,48 +226,50 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      {/* Main Content - Improved for Mobile */}
+      <main className="container mx-auto px-4 py-6 mobile-padding">
         {/* Status Indicators */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {usingCurrentLocation && location && (
-            <div className="p-3 bg-kashmir-light-green-50 dark:bg-kashmir-dark-green-900 border border-kashmir-light-green-200 dark:border-kashmir-dark-green-300 rounded-lg">
-              <p className="text-kashmir-light-green-700 dark:text-kashmir-dark-green-400 text-sm">
-                🌍 Auto-detected: <strong>{location.city}, {location.country}</strong>
-              </p>
-            </div>
-          )}
-          
-          {locationError && (
-            <div className="p-3 bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200 border border-kashmir-light-neutral-300 dark:border-kashmir-dark-neutral-400 rounded-lg">
-              <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300 text-sm">
-                ℹ️ {locationError} Using default location: Srinagar
-              </p>
-            </div>
-          )}
-        </div>
+        {(usingCurrentLocation && location) || locationError ? (
+          <div className="grid grid-cols-1 gap-3 mb-4">
+            {usingCurrentLocation && location && (
+              <div className="p-3 bg-kashmir-light-green-50 dark:bg-kashmir-dark-green-900 border border-kashmir-light-green-200 dark:border-kashmir-dark-green-300 rounded-lg">
+                <p className="text-kashmir-light-green-700 dark:text-kashmir-dark-green-400 text-sm">
+                  🌍 Auto-detected: <strong>{location.city}</strong>
+                </p>
+              </div>
+            )}
+            
+            {locationError && (
+              <div className="p-3 bg-kashmir-light-neutral-100 dark:bg-kashmir-dark-neutral-200 border border-kashmir-light-neutral-300 dark:border-kashmir-dark-neutral-400 rounded-lg">
+                <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300 text-sm">
+                  ℹ️ Using default location: Srinagar
+                </p>
+              </div>
+            )}
+          </div>
+        ) : null}
 
         {/* Error State */}
         {error ? (
-          <div className="card p-8 text-center">
+          <div className="card p-6 text-center">
             <div className="text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 mb-4">
-              <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
             </div>
-            <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300 mb-4">{error}</p>
+            <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300 mb-4 text-sm">{error}</p>
             <button 
               onClick={() => fetchWeatherData('Srinagar')}
-              className="btn-primary"
+              className="btn-primary text-sm py-2 px-4"
             >
               Try Again
             </button>
           </div>
         ) : isLoading ? (
-          <div className="card p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-kashmir-light-blue-500 dark:border-kashmir-dark-blue-500 mx-auto"></div>
-            <p className="mt-4 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">
-              {locationLoading ? 'Detecting your location...' : 'Loading weather data...'}
+          <div className="card p-6 text-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-kashmir-light-blue-500 dark:border-kashmir-dark-blue-500 mx-auto"></div>
+            <p className="mt-4 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 text-sm">
+              {locationLoading ? 'Detecting location...' : 'Loading weather...'}
             </p>
           </div>
         ) : weatherData ? (
@@ -261,82 +278,57 @@ export default function Dashboard() {
             <WeatherCard weatherData={weatherData} timeOfDay={getTimeOfDay()} />
 
             {/* Theme Indicator */}
-            <div className="mt-6">
+            <div className="mt-4">
               <ThemeIndicator 
                 weatherCondition={weatherData.weather[0]?.description || ''}
                 temperature={weatherData.main.temp}
               />
             </div>
 
-            {/* 7 New Features Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mt-8">
-              {/* Feature 1: Tourism Spotlight */}
-              <div onClick={() => setActiveFeature('tourism')}>
-                <TourismSpotlight />
-              </div>
-
-              {/* Feature 2: Air Quality */}
-              <div onClick={() => setActiveFeature('aqi')}>
-                <AirQuality city={weatherData.name} />
-              </div>
-
-              {/* Feature 3: Prayer Times */}
-              <div onClick={() => setActiveFeature('prayer')}>
-                <PrayerTimes />
-              </div>
-
-              {/* Feature 4: Weather Trends */}
-              <div onClick={() => setActiveFeature('weather')}>
-                <WeatherTrends currentTemp={weatherData.main.temp} />
-              </div>
-
-              {/* Feature 5: Activity Recommendations */}
-              <div onClick={() => setActiveFeature('tourism')}>
-                <ActivityRecommendations 
-                  weather={weatherData.weather[0]?.description || ''}
-                  temperature={weatherData.main.temp}
-                  timeOfDay={getTimeOfDay()}
-                />
-              </div>
-
-              {/* Feature 6: World Weather */}
-              <div onClick={() => setActiveFeature('weather')}>
-                <WorldWeather />
-              </div>
+            {/* 7 New Features Grid - Improved for Mobile */}
+            <div className="feature-grid mt-6">
+              <TourismSpotlight />
+              <AirQuality city={weatherData.name} />
+              <PrayerTimes />
+              <WeatherTrends currentTemp={weatherData.main.temp} />
+              <ActivityRecommendations 
+                weather={weatherData.weather[0]?.description || ''}
+                temperature={weatherData.main.temp}
+                timeOfDay={getTimeOfDay()}
+              />
+              <WorldWeather />
             </div>
 
-            {/* Feature 7: Dynamic Theme is already applied above */}
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-              <div className="card p-4 text-center">
-                <div className="text-2xl mb-2">🌡️</div>
-                <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Feels Like</p>
-                <p className="text-lg font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
+            {/* Quick Stats - Improved for Mobile */}
+            <div className="grid grid-cols-2 gap-3 mt-6">
+              <div className="card p-3 text-center">
+                <div className="text-xl mb-1">🌡️</div>
+                <p className="text-xs text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Feels Like</p>
+                <p className="text-sm font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
                   {Math.round(weatherData.main.feels_like)}°C
                 </p>
               </div>
               
-              <div className="card p-4 text-center">
-                <div className="text-2xl mb-2">💨</div>
-                <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Wind</p>
-                <p className="text-lg font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
+              <div className="card p-3 text-center">
+                <div className="text-xl mb-1">💨</div>
+                <p className="text-xs text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Wind</p>
+                <p className="text-sm font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
                   {weatherData.wind.speed} m/s
                 </p>
               </div>
               
-              <div className="card p-4 text-center">
-                <div className="text-2xl mb-2">💧</div>
-                <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Humidity</p>
-                <p className="text-lg font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
+              <div className="card p-3 text-center">
+                <div className="text-xl mb-1">💧</div>
+                <p className="text-xs text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Humidity</p>
+                <p className="text-sm font-bold text-kashmir-light-blue-600 dark:text-kashmir-dark-blue-400">
                   {weatherData.main.humidity}%
                 </p>
               </div>
               
-              <div className="card p-4 text-center">
-                <div className="text-2xl mb-2">🔍</div>
-                <p className="text-sm text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Features</p>
-                <p className="text-lg font-bold text-kashmir-light-green-600 dark:text-kashmir-dark-green-400">
+              <div className="card p-3 text-center">
+                <div className="text-xl mb-1">🔍</div>
+                <p className="text-xs text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400">Features</p>
+                <p className="text-sm font-bold text-kashmir-light-green-600 dark:text-kashmir-dark-green-400">
                   7 Active
                 </p>
               </div>
@@ -344,35 +336,38 @@ export default function Dashboard() {
           </>
         ) : null}
 
-        {/* Contact Section */}
-        <div className="card p-6 mt-8 text-center">
-          <h3 className="text-lg font-semibold text-kashmir-light-neutral-800 dark:text-kashmir-dark-neutral-200 mb-4">
+        {/* Contact Section - Updated with Modern Icons */}
+        <div className="card p-4 mt-6 text-center">
+          <h3 className="text-base font-semibold text-kashmir-light-neutral-800 dark:text-kashmir-dark-neutral-200 mb-3">
             📱 Connect With Developer
           </h3>
-          <div className="flex justify-center space-x-6">
+          <div className="flex justify-center space-x-4">
             <a 
-              href="https://instagram.com/saffan.akbar" 
+              href="https://www.instagram.com/owaisdar_511?igsh=MWV6d21lbjVpNXh6Yg==" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 hover:text-kashmir-light-blue-500 dark:hover:text-kashmir-dark-blue-400 transition-colors p-3 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200"
+              className="flex flex-col items-center space-y-1 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 hover:text-kashmir-light-blue-500 dark:hover:text-kashmir-dark-blue-400 transition-colors p-2 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200"
             >
-              <span className="text-2xl">📷</span>
-              <div className="text-left">
-                <p className="font-semibold">Instagram</p>
-                <p className="text-sm">@saffan.akbar</p>
-              </div>
+              <img src="/instagram-icon.png" alt="Instagram" className="w-6 h-6" />
+              <span className="text-xs font-medium">Instagram</span>
+            </a>
+            <a 
+              href="http://www.youtube.com/@CaliZenOwais" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex flex-col items-center space-y-1 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 hover:text-kashmir-light-blue-500 dark:hover:text-kashmir-dark-blue-400 transition-colors p-2 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200"
+            >
+              <img src="/youtube-icon.png" alt="YouTube" className="w-6 h-6" />
+              <span className="text-xs font-medium">YouTube</span>
             </a>
             <a 
               href="https://github.com/Saff9" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 hover:text-kashmir-light-blue-500 dark:hover:text-kashmir-dark-blue-400 transition-colors p-3 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200"
+              className="flex flex-col items-center space-y-1 text-kashmir-light-neutral-600 dark:text-kashmir-dark-neutral-400 hover:text-kashmir-light-blue-500 dark:hover:text-kashmir-dark-blue-400 transition-colors p-2 rounded-lg hover:bg-kashmir-light-neutral-100 dark:hover:bg-kashmir-dark-neutral-200"
             >
-              <span className="text-2xl">💻</span>
-              <div className="text-left">
-                <p className="font-semibold">GitHub</p>
-                <p className="text-sm">Saff9</p>
-              </div>
+              <img src="/github-icon.png" alt="GitHub" className="w-6 h-6" />
+              <span className="text-xs font-medium">GitHub</span>
             </a>
           </div>
         </div>
