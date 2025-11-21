@@ -90,18 +90,18 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
             <div className="menu-item">
               <span className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">About App</span>
               <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
-                Kashmir-inspired weather app with 7+ advanced features
+                Kashmir-inspired weather app with  advanced features
               </p>
             </div>
 
             <div className="menu-item">
               <span className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">About Developer</span>
               <p className="text-kashmir-light-neutral-700 dark:text-kashmir-dark-neutral-300">
-                Built with ❤️ by Saffan Akbar
+                Built with ❤️ by Owais Ahmad 
               </p>
             </div>
 
-          // In Menu.tsx, update the contact section:
+          
 <div className="menu-item">
   <span className="text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">Contact Us</span>
   <div className="space-y-2">
@@ -216,7 +216,7 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
           {/* Footer */}
           <div className="pt-6 border-t border-kashmir-light-neutral-200 dark:border-kashmir-dark-neutral-300">
             <p className="text-center text-sm text-kashmir-light-neutral-500 dark:text-kashmir-dark-neutral-500">
-              Made with ❄️ for Kashmir
+              Made with ❄️ for Kashmir\World
             </p>
             <p className="text-center text-xs text-kashmir-light-neutral-400 dark:text-kashmir-dark-neutral-500 mt-1">
               SkyKash v2.0 • All features active
